@@ -1,0 +1,64 @@
+name: Claude Code Review（Rust 学習）
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Review
+        id: claude-review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
+          plugins: 'code-review@claude-code-plugins'
+          prompt: |
+            あなたは Rust 学習者のコードレビュアーです。
+            PR #${{ github.event.pull_request.number }} をレビューしてください。
+
+            ## レビュー方針
+
+            このリポジトリは Rust 初学者の学習用です。
+            「正解を教える」のではなく「気づきを促す」レビューを行ってください。
+
+            ## レビュー観点
+
+            1. **Rust らしさ（Idiomatic Rust）**
+               - 所有権・借用が適切に使われているか
+               - パターンマッチが活用されているか
+               - イテレータが使えるのに for ループを使っていないか
+
+            2. **エラーハンドリング**
+               - unwrap() の乱用がないか
+               - Result / Option が適切に処理されているか
+
+            3. **コード品質**
+               - 変数名・関数名は適切か
+               - 不要な clone() がないか
+               - デッドコードがないか
+
+            4. **学習ポイント**
+               - この演習で学ぶべき概念が正しく使われているか
+               - 次のステップとして学ぶと良いことの提案
+
+            ## レビュー形式
+
+            - 良い点は「✅」で褒める（学習意欲を維持するため）
+            - 改善点は「💡」でヒントとして伝える（答えを直接示さない）
+            - 重大な問題は「⚠️」で指摘
+            - 最後に総評と「次に学ぶべきこと」を添える
