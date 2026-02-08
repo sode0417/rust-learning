@@ -4,10 +4,14 @@ fn main() {
     }
 }
 fn fizzbuzz(n: u32) -> String {
-    let result =
-        if n.is_multiple_of(15) {"FizzBuzz"}
-        else if n.is_multiple_of(3) {"Fizz"}
-        else if n.is_multiple_of(5) {"Buzz"}
-        else {&n.to_string()};
-    result.to_string()
+    let result: String = if n.is_multiple_of(15) {
+        "FizzBuzz".to_string()
+    } else if n.is_multiple_of(3) {
+        "Fizz".to_string()
+    } else if n.is_multiple_of(5) {
+        "Buzz".to_string()
+    } else {
+        n.to_string()
+    };
+    result
 }
