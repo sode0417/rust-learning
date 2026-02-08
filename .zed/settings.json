@@ -1,0 +1,40 @@
+{
+  "features": {
+    "inline_completion_provider": "none"
+  },
+  "show_inline_completions": false,
+
+  "format_on_save": "on",
+  "formatter": "language_server",
+  "tab_size": 4,
+
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true
+  },
+
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy"
+        },
+        "procMacro": {
+          "enable": true
+        },
+        "inlayHints": {
+          "lifetimeElisionHints": {
+            "enable": "skip_trivial"
+          },
+          "closureReturnTypeHints": {
+            "enable": "always"
+          }
+        },
+        "rust": {
+          "analyzerTargetDir": true
+        }
+      }
+    }
+  }
+}
